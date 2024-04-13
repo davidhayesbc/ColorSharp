@@ -1,17 +1,17 @@
 ﻿/*
  * The MIT License (MIT)
  * Copyright (c) 2014 Andrés Correa Casablanca
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,47 +22,45 @@
  */
 
 /*
-* Contributors:
-*  - Andrés Correa Casablanca <castarco@gmail.com , castarco@litipk.com>
-*/
+ * Contributors:
+ *  - Andrés Correa Casablanca <castarco@gmail.com , castarco@litipk.com>
+ */
 
 
 namespace Litipk.ColorSharp
 {
-	namespace Strategies
-	{
-		/**
-		 * <summary>
-		 * Enum type used to specify alternative strategies in CIE XYZ <-> LMS conversions.
-		 * </summary>
-		 */
-		public enum LMSStrategy
-		{
-			/// <summary></summary>
-			VonKries,
+    namespace Strategies
+    {
+        /**
+         * <summary>
+         *     Enum type used to specify alternative strategies in CIE XYZ <-> LMS conversions.
+         * </summary>
+         */
+        public enum LMSStrategy
+        {
+            /// <summary></summary>
+            VonKries,
 
-			/// <summary></summary>
-			Bradford,
+            /// <summary></summary>
+            Bradford,
 
-			/// <summary></summary>
-			Sharp,
+            /// <summary></summary>
+            Sharp,
 
-			/// <summary></summary>
-			HuntPointerEstevez,
+            /// <summary></summary>
+            HuntPointerEstevez,
 
-			/// <summary></summary>
-			CMCCAT97,
+            /// <summary></summary>
+            CMCCAT97,
 
-			/// <summary></summary>
-			CAT02,
+            /// <summary></summary>
+            CAT02,
 
-			/// <summary></summary>
-			CMCCAT2000,
+            /// <summary></summary>
+            CMCCAT2000,
 
-			/// <summary></summary>
-			XYZScaling
-		}
-	}
+            /// <summary></summary>
+            XYZScaling
+        }
+    }
 }
-
-

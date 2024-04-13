@@ -1,17 +1,17 @@
 ﻿/*
  * The MIT License (MIT)
  * Copyright (c) 2014 Andrés Correa Casablanca
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,228 +28,214 @@
 
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
+using System.Linq;
 using Litipk.ColorSharp.ColorSpaces;
-
 
 namespace Litipk.ColorSharp
 {
-	namespace LightSpectrums
-	{
-		/**
-		 * Class to handle light spectrum samples with equidistant data points
-		 */
-		public sealed class RegularLightSpectrum : AInterpolatedLightSpectrum
-		{
-			#region properties
+    namespace LightSpectrums
+    {
+        /**
+         * Class to handle light spectrum samples with equidistant data points
+         */
+        public sealed class RegularLightSpectrum : AInterpolatedLightSpectrum
+        {
+            #region AConvertibleColor methods
 
-			/**
-			 * <value>Nanometers between each data point.</value>
-			 */
-			public readonly double NmPerStep;
+            /**
+             * <inheritdoc />
+             */
+            public override bool IsInsideColorSpace(bool highPrecision = false)
+            {
+                if (MinWaveLength <= double.Epsilon)
+                    return false;
 
-			/**
-			 * <value>Minimum wavelength for which we have information on this spectrum.</value>
-			 */
-			public readonly double MinWaveLength;
+                foreach (var amplitude in Amplitudes)
+                    if (amplitude < 0.0)
+                        return false;
 
-			/**
-			 * <value>Maximum wavelength for which we have information on this spectrum.</value>
-			 */
-			public readonly double MaxWaveLength;
+                return true;
+            }
 
-			/**
-			 * <value>Equidistant data points (usually relative values)</value>
-			 */
-			public readonly ReadOnlyCollection<double> Amplitudes;
-			#endregion
+            #endregion
 
+            #region properties
 
-			#region constructors
+            /**
+             * <value>Nanometers between each data point.</value>
+             */
+            public readonly double NmPerStep;
 
-			/**
-			 * <param name="minWaveLength">Associated wavelength to the first value of 'amplitudes'.</param>
-			 * <param name="maxWaveLength">Associated wavelength to the last value of 'amplitudes'.</param>
-			 * <param name="amplitudes">Equidistant data points.</param>
-			 * <param name="dataSource">
-			 *     Reference to a AConvertibleColor instance from which this object has been generated.
-			 * </param>
-			 */
-			public RegularLightSpectrum (double minWaveLength, double maxWaveLength, IList<double> amplitudes, AConvertibleColor dataSource=null) : base(dataSource)
-			{
-				MinWaveLength = minWaveLength;
-				MaxWaveLength = maxWaveLength;
-				NmPerStep = (maxWaveLength - minWaveLength) / (amplitudes.Count - 1);
-				Amplitudes = new ReadOnlyCollection<double> (amplitudes);
-			}
+            /**
+             * <value>Minimum wavelength for which we have information on this spectrum.</value>
+             */
+            public readonly double MinWaveLength;
 
-			/**
-			 * <param name="minWaveLength">Associated wavelength to the first value of 'amplitudes'.</param>
-			 * <param name="amplitudes">Equidistant data points.</param>
-			 * <param name="nmPerStep">Nanometers between each data point in 'amplitudes'.</param>
-			 * <param name="dataSource">
-			 *     Reference to a AConvertibleColor instance from which this object has been generated.
-			 * </param>
-			 */
-			public RegularLightSpectrum (double minWaveLength, IList<double> amplitudes, double nmPerStep, AConvertibleColor dataSource=null) : base(dataSource)
-			{
-				NmPerStep = nmPerStep;
-				MinWaveLength = minWaveLength;
-				MaxWaveLength = minWaveLength + nmPerStep * (amplitudes.Count - 1);
-				Amplitudes = new ReadOnlyCollection<double> (amplitudes);
-			}
+            /**
+             * <value>Maximum wavelength for which we have information on this spectrum.</value>
+             */
+            public readonly double MaxWaveLength;
 
-			/**
-			 * <param name="amplitudes">Equidistant data points.</param>
-			 * <param name="nmPerStep">Nanometers between each data point in 'amplitudes'.</param>
-			 * <param name="maxWaveLength">Associated wavelength to the last value of 'amplitudes'.</param>
-			 * <param name="dataSource">
-			 *     Reference to a AConvertibleColor instance from which this object has been generated.
-			 * </param>
-			 */
-			public RegularLightSpectrum (IList<double> amplitudes, double nmPerStep, double maxWaveLength, AConvertibleColor dataSource=null) : base(dataSource)
-			{
-				NmPerStep = nmPerStep;
-				MaxWaveLength = maxWaveLength;
-				MinWaveLength = maxWaveLength - nmPerStep * (amplitudes.Count - 1);
-				Amplitudes = new ReadOnlyCollection<double> (amplitudes);
-			}
+            /**
+             * <value>Equidistant data points (usually relative values)</value>
+             */
+            public readonly ReadOnlyCollection<double> Amplitudes;
 
-			#endregion
+            #endregion
 
 
-			#region ALightSpectrum methods
+            #region constructors
 
-			/**
-			 * <inheritdoc />
-			 */
-			public override double EvaluateAt (double waveLength)
-			{
-				if (waveLength >= MinWaveLength && waveLength <= MaxWaveLength) {
-					double dblIndex = (waveLength - MinWaveLength) / NmPerStep;
-					double floorIndex = Math.Floor (dblIndex);
-					int uIndex = (int)floorIndex;
+            /**
+             * <param name="minWaveLength">Associated wavelength to the first value of 'amplitudes'.</param>
+             * <param name="maxWaveLength">Associated wavelength to the last value of 'amplitudes'.</param>
+             * <param name="amplitudes">Equidistant data points.</param>
+             * <param name="dataSource">
+             *     Reference to a AConvertibleColor instance from which this object has been generated.
+             * </param>
+             */
+            public RegularLightSpectrum(double minWaveLength, double maxWaveLength, IList<double> amplitudes, AConvertibleColor dataSource = null) : base(dataSource)
+            {
+                MinWaveLength = minWaveLength;
+                MaxWaveLength = maxWaveLength;
+                NmPerStep = (maxWaveLength - minWaveLength) / (amplitudes.Count - 1);
+                Amplitudes = new ReadOnlyCollection<double>(amplitudes);
+            }
 
-					if (dblIndex - floorIndex <= 2*double.Epsilon) {
-						return Amplitudes [uIndex];
-					}
+            /**
+             * <param name="minWaveLength">Associated wavelength to the first value of 'amplitudes'.</param>
+             * <param name="amplitudes">Equidistant data points.</param>
+             * <param name="nmPerStep">Nanometers between each data point in 'amplitudes'.</param>
+             * <param name="dataSource">
+             *     Reference to a AConvertibleColor instance from which this object has been generated.
+             * </param>
+             */
+            public RegularLightSpectrum(double minWaveLength, IList<double> amplitudes, double nmPerStep, AConvertibleColor dataSource = null) : base(dataSource)
+            {
+                NmPerStep = nmPerStep;
+                MinWaveLength = minWaveLength;
+                MaxWaveLength = minWaveLength + nmPerStep * (amplitudes.Count - 1);
+                Amplitudes = new ReadOnlyCollection<double>(amplitudes);
+            }
 
-					double alpha = (dblIndex - floorIndex);
+            /**
+             * <param name="amplitudes">Equidistant data points.</param>
+             * <param name="nmPerStep">Nanometers between each data point in 'amplitudes'.</param>
+             * <param name="maxWaveLength">Associated wavelength to the last value of 'amplitudes'.</param>
+             * <param name="dataSource">
+             *     Reference to a AConvertibleColor instance from which this object has been generated.
+             * </param>
+             */
+            public RegularLightSpectrum(IList<double> amplitudes, double nmPerStep, double maxWaveLength, AConvertibleColor dataSource = null) : base(dataSource)
+            {
+                NmPerStep = nmPerStep;
+                MaxWaveLength = maxWaveLength;
+                MinWaveLength = maxWaveLength - nmPerStep * (amplitudes.Count - 1);
+                Amplitudes = new ReadOnlyCollection<double>(amplitudes);
+            }
 
-					return Amplitudes [uIndex] + alpha * (Amplitudes [uIndex + 1] - Amplitudes [uIndex]);
-				}
-
-				// TODO: add extrapolation
-				throw new ArgumentOutOfRangeException ();
-			}
-
-			/**
-			 * <inheritdoc />
-			 */
-			public override double GetSupportMinValue()
-			{
-				return MinWaveLength;
-			}
-
-			/**
-			 * <inheritdoc />
-			 */
-			public override double GetSupportMaxValue()
-			{
-				return MaxWaveLength;
-			}
-
-			/**
-			 * <inheritdoc />
-			 */
-			public override double GetMaxValueOnSupport ()
-			{
-				double max = 0;
-
-				for (int i = 0; i < Amplitudes.Count; i++) {
-					if (Amplitudes [i] > max) {
-						max = Amplitudes [i];
-					}
-				}
-
-				return max;
-			}
-
-			/**
-			 * <inheritdoc />
-			 */
-			public override int GetNumberOfDataPoints()
-			{
-				return Amplitudes.Count;
-			}
-
-			#endregion
+            #endregion
 
 
-			#region AConvertibleColor methods
+            #region ALightSpectrum methods
 
-			/**
-			 * <inheritdoc />
-			 */
-			public override bool IsInsideColorSpace(bool highPrecision = false)
-			{
-				if (MinWaveLength <= double.Epsilon)
-					return false;
+            /**
+             * <inheritdoc />
+             */
+            public override double EvaluateAt(double waveLength)
+            {
+                if (waveLength >= MinWaveLength && waveLength <= MaxWaveLength)
+                {
+                    var dblIndex = (waveLength - MinWaveLength) / NmPerStep;
+                    var floorIndex = Math.Floor(dblIndex);
+                    var uIndex = (int)floorIndex;
 
-				foreach (double amplitude in Amplitudes) {
-					if (amplitude < 0.0)
-						return false;
-				}
+                    if (dblIndex - floorIndex <= 2 * double.Epsilon) return Amplitudes[uIndex];
 
-				return true;
-			}
+                    var alpha = dblIndex - floorIndex;
 
-			#endregion
+                    return Amplitudes[uIndex] + alpha * (Amplitudes[uIndex + 1] - Amplitudes[uIndex]);
+                }
+
+                // TODO: add extrapolation
+                throw new ArgumentOutOfRangeException();
+            }
+
+            /**
+             * <inheritdoc />
+             */
+            public override double GetSupportMinValue()
+            {
+                return MinWaveLength;
+            }
+
+            /**
+             * <inheritdoc />
+             */
+            public override double GetSupportMaxValue()
+            {
+                return MaxWaveLength;
+            }
+
+            /**
+             * <inheritdoc />
+             */
+            public override double GetMaxValueOnSupport()
+            {
+                double max = 0;
+
+                for (var i = 0; i < Amplitudes.Count; i++)
+                    if (Amplitudes[i] > max)
+                        max = Amplitudes[i];
+
+                return max;
+            }
+
+            /**
+             * <inheritdoc />
+             */
+            public override int GetNumberOfDataPoints()
+            {
+                return Amplitudes.Count;
+            }
+
+            #endregion
 
 
-			#region Object methods
+            #region Object methods
 
-			/**
-			 *  <inheritdoc />
-			 */
-			public override bool Equals(Object obj)
-			{
-				RegularLightSpectrum rls = obj as RegularLightSpectrum;
+            /**
+             * <inheritdoc />
+             */
+            public override bool Equals(object obj)
+            {
+                var rls = obj as RegularLightSpectrum;
 
-				if (rls == this) {
-					return true;
-				}
-				if (rls == null) {
-					return false;
-				}
+                if (rls == this) return true;
+                if (rls == null) return false;
 
-				return (
-					NmPerStep     == rls.NmPerStep     &&
-					MinWaveLength == rls.MinWaveLength &&
-					MaxWaveLength == rls.MaxWaveLength &&
-					Amplitudes.SequenceEqual(rls.Amplitudes)
-				);
-			}
+                return NmPerStep == rls.NmPerStep &&
+                       MinWaveLength == rls.MinWaveLength &&
+                       MaxWaveLength == rls.MaxWaveLength &&
+                       Amplitudes.SequenceEqual(rls.Amplitudes);
+            }
 
-			/**
-			 *  <inheritdoc />
-			 */
-			public override int GetHashCode ()
-			{
-				int hash = 25591 + NmPerStep.GetHashCode ();  // 25591 == 157 * 163
+            /**
+             * <inheritdoc />
+             */
+            public override int GetHashCode()
+            {
+                var hash = 25591 + NmPerStep.GetHashCode(); // 25591 == 157 * 163
 
-				hash = hash * 163 + MinWaveLength.GetHashCode ();
-				hash = hash * 163 + MaxWaveLength.GetHashCode ();
+                hash = hash * 163 + MinWaveLength.GetHashCode();
+                hash = hash * 163 + MaxWaveLength.GetHashCode();
 
-				return hash * 163 + Amplitudes.GetHashCode ();
-			}
+                return hash * 163 + Amplitudes.GetHashCode();
+            }
 
-			#endregion
-		}
-	}
+            #endregion
+        }
+    }
 }
-
-

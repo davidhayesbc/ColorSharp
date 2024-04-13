@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
-<package >
-  <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
-    <licenseUrl>https://raw.githubusercontent.com/Litipk/ColorSharp/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/Litipk/ColorSharp</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
-    <releaseNotes>
-- Added CCT computation.
-- Added Duv computation.
-    </releaseNotes>
-    <copyright>Copyright 2014-2015</copyright>
-    <tags>Light Color Colour CIEXYZ CIExyY sRGB</tags>
-  </metadata>
+
+<package>
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>$author$</authors>
+		<owners>$author$</owners>
+		<licenseUrl>https://raw.githubusercontent.com/Litipk/ColorSharp/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/Litipk/ColorSharp</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>$description$</description>
+		<releaseNotes>
+			- Added CCT computation.
+			- Added Duv computation.
+		</releaseNotes>
+		<copyright>Copyright 2014-2015</copyright>
+		<tags>Light Color Colour CIEXYZ CIExyY sRGB</tags>
+	</metadata>
 </package>

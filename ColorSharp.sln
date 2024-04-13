@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorSharp", "ColorSharp\ColorSharp.csproj", "{960524F3-F375-4CDE-A82A-609CC32048E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorSharp", "ColorSharp\ColorSharp.csproj", "{960524F3-F375-4CDE-A82A-609CC32048E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorSharpTests", "ColorSharpTests\ColorSharpTests.csproj", "{1EC57B2E-C96F-411B-A238-B8E490634009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorSharpTests", "ColorSharpTests\ColorSharpTests.csproj", "{1EC57B2E-C96F-411B-A238-B8E490634009}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
